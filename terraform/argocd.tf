@@ -27,6 +27,14 @@ resource "helm_release" "argocd" {
           "kustomize.buildOptions" = "--enable-helm"
         }
       }
+      repoServer = {
+        livenessProbe = {
+          initialDelaySeconds = 30
+        }
+        readinessProbe = {
+          initialDelaySeconds = 30
+        }
+      }
       server = {}
     })
   ]

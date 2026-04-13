@@ -67,7 +67,7 @@ resource "google_container_node_pool" "primary" {
   }
 
   node_config {
-    machine_type    = "e2-small"
+    machine_type    = "e2-medium"
     disk_size_gb    = 20
     disk_type       = "pd-standard"
     service_account = google_service_account.nodes.email

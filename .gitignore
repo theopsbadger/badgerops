@@ -1,3 +1,6 @@
+# Kustomize Helm cache
+argocd/base/*/charts/
+
 # Terraform
 .terraform/
 *.tfstate

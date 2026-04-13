@@ -3,4 +3,9 @@ configs:
     server.insecure: true
   cm:
     kustomize.buildOptions: --enable-helm
+repoServer:
+  livenessProbe:
+    initialDelaySeconds: 30
+  readinessProbe:
+    initialDelaySeconds: 30
 server: {}
