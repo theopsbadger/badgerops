@@ -8,6 +8,7 @@ spec:
     - git:
         repoURL: https://github.com/theopsbadger/badgerops.git
         revision: HEAD
+        requeueAfterSeconds: 180
         directories:
           - path: argocd/overlays/badgerops/*
   template:
