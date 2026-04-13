@@ -3,6 +3,18 @@ configs:
     server.insecure: true
   cm:
     kustomize.buildOptions: --enable-helm
+    dex.config: |
+      connectors:
+        - type: github
+          id: github
+          name: GitHub
+          config:
+            clientID: Ov23lijPj0PQJnlIx2tf
+            clientSecret: $dex.github.clientSecret
+  rbac:
+    policy.default: role:readonly
+    policy.csv: |
+      g, theopsbadger, role:admin
 repoServer:
   livenessProbe:
     initialDelaySeconds: 30
