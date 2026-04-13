@@ -53,9 +53,17 @@ curl -s ifconfig.me
 
 ### 3. Deploy the cluster
 
+Create `terraform/backend.hcl`:
+
+```hcl
+bucket = "YOUR_PROJECT_ID-tfstate"
+```
+
+Then run:
+
 ```bash
 cd terraform
-terraform init
+terraform init -backend-config=backend.hcl
 terraform apply
 ```
 
@@ -85,7 +93,7 @@ kubectl apply -f argocd/infra/istio_gateway/
 Then restrict access to your IP:
 
 ```bash
-kubectl patch service argocd-gateway-istio -n argocd \
+kubectl patch service istio-gateway-istio -n istio-gateway \
   --type merge \
   -p '{"spec":{"loadBalancerSourceRanges":["your-public-ip/32"]}}'
 ```
@@ -93,7 +101,7 @@ kubectl patch service argocd-gateway-istio -n argocd \
 Get the gateway IP:
 
 ```bash
-kubectl get gateway argocd-gateway -n argocd -o jsonpath='{.status.addresses[0].value}'
+kubectl get gateway istio-gateway -n istio-gateway -o jsonpath='{.status.addresses[0].value}'
 ```
 
 ArgoCD will be accessible at `http://<gateway-ip>`.

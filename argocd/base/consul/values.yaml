@@ -1,0 +1,8 @@
+global:
+  name: consul
+syncCatalog:
+  enabled: true
+connectInject:
+  enabled: false
+  apiGateway:
+    manageExternalCRDs: false

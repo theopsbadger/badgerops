@@ -23,6 +23,9 @@ resource "helm_release" "argocd" {
         params = {
           "server.insecure" = true
         }
+        cm = {
+          "kustomize.buildOptions" = "--enable-helm"
+        }
       }
       server = {}
     })

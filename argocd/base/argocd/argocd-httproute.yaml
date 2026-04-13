@@ -5,8 +5,8 @@ metadata:
   namespace: argocd
 spec:
   parentRefs:
-    - name: argocd-gateway
-      namespace: argocd
+    - name: istio-gateway
+      namespace: istio-gateway
   rules:
     - backendRefs:
         - name: argocd-server
