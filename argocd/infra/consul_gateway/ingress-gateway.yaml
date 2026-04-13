@@ -1,0 +1,13 @@
+apiVersion: consul.hashicorp.com/v1alpha1
+kind: IngressGateway
+metadata:
+  name: ingress-gateway
+  namespace: consul
+spec:
+  listeners:
+    - port: 80
+      protocol: http
+      services:
+        - name: argocd-server-argocd
+          hosts:
+            - "*"
