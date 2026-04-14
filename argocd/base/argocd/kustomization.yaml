@@ -5,6 +5,7 @@ resources:
   - argocd-httproute.yaml
   - appset.yaml
   - repo.yaml
+  - externalsecret-argocd.yaml
 helmCharts:
   - name: argo-cd
     repo: https://argoproj.github.io/argo-helm

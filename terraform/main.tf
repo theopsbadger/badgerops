@@ -66,12 +66,12 @@ resource "google_container_node_pool" "primary" {
   location = local.zone
 
   autoscaling {
-    min_node_count = 1
-    max_node_count = 3
+    min_node_count = 2
+    max_node_count = 4
   }
 
   node_config {
-    machine_type    = "e2-medium"
+    machine_type    = "e2-standard-2"
     disk_size_gb    = 20
     disk_type       = "pd-standard"
     service_account = google_service_account.nodes.email
