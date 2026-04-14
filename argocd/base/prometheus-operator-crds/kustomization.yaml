@@ -1,3 +1,16 @@
+# This app must be deployed as a SEPARATE ArgoCD application from kube-prometheus-stack.
+#
+# Why: Kustomize's Helm inflator only renders resources from a chart's templates/ directory.
+# It does NOT render CRDs from a chart's crds/ directory. This means setting crds.enabled=true
+# in kube-prometheus-stack values has no effect when rendered via ArgoCD + kustomize.
+#
+# Without the Prometheus Operator CRDs installed first, ArgoCD cannot apply PrometheusRule,
+# ServiceMonitor, Alertmanager, or Prometheus resources — the entire stack sync fails.
+#
+# This chart puts CRDs in templates/ (not crds/), so ArgoCD can apply them in a separate
+# sync before kube-prometheus-stack attempts to create resources that depend on them.
+#
+# DO NOT merge this into kube-prometheus-stack.
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 helmCharts:

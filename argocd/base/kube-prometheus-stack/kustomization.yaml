@@ -1,3 +1,5 @@
+# Requires prometheus-operator-crds to be deployed as a separate ArgoCD app first.
+# See argocd/base/prometheus-operator-crds/kustomization.yaml for explanation.
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
