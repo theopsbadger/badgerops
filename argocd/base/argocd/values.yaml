@@ -14,9 +14,12 @@ configs:
             clientID: Ov23lijPj0PQJnlIx2tf
             clientSecret: $dex.github.clientSecret
   rbac:
-    policy.default: role:readonly
+    policy.default: role:''
     policy.csv: |
       g, theopsbadger, role:admin
+      # Add additional GitHub users below:
+      # g, <github-username>, role:admin
+      # g, <github-username>, role:readonly
 repoServer:
   livenessProbe:
     initialDelaySeconds: 30
