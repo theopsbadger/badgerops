@@ -13,18 +13,8 @@ spec:
   rules:
     - matches:
         - path:
-            type: Prefix
-            value: /productpage
+            type: PathPrefix
+            value: /
       backendRefs:
         - name: productpage
           port: 9080
-    - matches:
-        - path:
-            type: Exact
-            value: /
-      filters:
-        - type: RequestRedirect
-          requestRedirect:
-            path:
-              type: ReplaceFullPath
-              replacePath: /productpage
