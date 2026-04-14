@@ -1,0 +1,3 @@
+serviceAccount:
+  annotations:
+    iam.gke.io/gcp-service-account: external-secrets@nice-virtue-493019-t2.iam.gserviceaccount.com
