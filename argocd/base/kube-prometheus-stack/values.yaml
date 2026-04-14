@@ -31,6 +31,20 @@ grafana:
     existingSecret: grafana-admin
     userKey: admin-user
     passwordKey: admin-password
+  grafana.ini:
+    server:
+      root_url: https://grafana.k8s.badgerops.io
+    auth.github:
+      enabled: true
+      allow_sign_up: false
+      client_id: Ov23liJ66WsUgHOWtmox
+      allowed_logins: theopsbadger
+  env:
+    GF_AUTH_GITHUB_CLIENT_SECRET:
+      valueFrom:
+        secretKeyRef:
+          name: grafana-admin
+          key: github-client-secret
 
 prometheusOperator:
   resources:
