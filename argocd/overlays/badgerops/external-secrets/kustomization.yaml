@@ -4,10 +4,4 @@ resources:
   - ../../../base/external-secrets
 patches:
   - path: cluster-secret-store-patch.yaml
-helmCharts:
-  - name: external-secrets
-    repo: https://charts.external-secrets.io
-    version: 0.14.0
-    releaseName: external-secrets
-    namespace: external-secrets
-    valuesFile: values.yaml
+  - path: serviceaccount-patch.yaml
