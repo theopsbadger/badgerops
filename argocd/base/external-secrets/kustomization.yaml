@@ -5,6 +5,7 @@ resources:
   - cluster-secret-store.yaml
   - externalsecret-cloudflare.yaml
   - externalsecret-argocd.yaml
+  - externalsecret-grafana.yaml
 helmCharts:
   - name: external-secrets
     repo: https://charts.external-secrets.io

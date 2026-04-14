@@ -27,7 +27,10 @@ grafana:
     limits:
       cpu: 200m
       memory: 256Mi
-  adminPassword: admin
+  admin:
+    existingSecret: grafana-admin
+    userKey: admin-user
+    passwordKey: admin-password
 
 prometheusOperator:
   resources:
