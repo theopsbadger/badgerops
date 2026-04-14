@@ -1,0 +1,30 @@
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: bookinfo
+  namespace: bookinfo
+spec:
+  parentRefs:
+    - name: istio-gateway
+      namespace: istio-gateway
+      sectionName: https
+  hostnames:
+    - bookinfo.CLUSTER_DOMAIN
+  rules:
+    - matches:
+        - path:
+            type: Prefix
+            value: /productpage
+      backendRefs:
+        - name: productpage
+          port: 9080
+    - matches:
+        - path:
+            type: Exact
+            value: /
+      filters:
+        - type: RequestRedirect
+          requestRedirect:
+            path:
+              type: ReplaceFullPath
+              replacePath: /productpage
