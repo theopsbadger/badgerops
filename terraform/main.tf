@@ -79,5 +79,9 @@ resource "google_container_node_pool" "primary" {
     oauth_scopes = [
       "https://www.googleapis.com/auth/cloud-platform",
     ]
+
+    workload_metadata_config {
+      mode = "GKE_METADATA"
+    }
   }
 }
