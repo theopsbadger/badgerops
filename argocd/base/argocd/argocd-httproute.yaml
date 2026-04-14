@@ -7,6 +7,9 @@ spec:
   parentRefs:
     - name: istio-gateway
       namespace: istio-gateway
+      sectionName: https
+  hostnames:
+    - argocd.k8s.badgerops.io
   rules:
     - backendRefs:
         - name: argocd-server

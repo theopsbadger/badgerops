@@ -4,7 +4,7 @@ configs:
   cm:
     kustomize.buildOptions: --enable-helm
     admin.enabled: "false"
-    url: http://34.173.79.193
+    url: https://argocd.k8s.badgerops.io
     dex.config: |
       connectors:
         - type: github

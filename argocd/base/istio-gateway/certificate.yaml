@@ -1,0 +1,12 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: wildcard-k8s-badgerops-io
+  namespace: istio-gateway
+spec:
+  secretName: wildcard-k8s-badgerops-io-tls
+  dnsNames:
+    - "*.k8s.badgerops.io"
+  issuerRef:
+    name: letsencrypt
+    kind: ClusterIssuer
