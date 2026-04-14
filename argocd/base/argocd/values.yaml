@@ -15,6 +15,7 @@ configs:
             clientSecret: $dex.github.clientSecret
   rbac:
     policy.default: role:''
+    scopes: '[preferred_username, groups]'
     policy.csv: |
       g, theopsbadger, role:admin
       # Add additional GitHub users below:
