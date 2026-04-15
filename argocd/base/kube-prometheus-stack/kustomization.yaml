@@ -7,6 +7,11 @@ resources:
   - namespace.yaml
   - grafana-httproute.yaml
   - externalsecret-grafana.yaml
+  - dashboards/node-exporter-full.yaml
+  - dashboards/istio-mesh.yaml
+  - dashboards/istio-service.yaml
+  - dashboards/istio-workload.yaml
+  - dashboards/argocd.yaml
 helmCharts:
   - name: kube-prometheus-stack
     repo: https://prometheus-community.github.io/helm-charts
