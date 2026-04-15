@@ -10,6 +10,7 @@ metadata:
 spec:
   validationFailureAction: Audit
   background: true
+  allowExistingViolations: true
   rules:
     - name: check-container-resources
       match:

@@ -10,6 +10,7 @@ metadata:
 spec:
   validationFailureAction: Audit
   background: true
+  allowExistingViolations: true
   rules:
     - name: check-image-tag
       match:
