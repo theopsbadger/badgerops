@@ -13,14 +13,11 @@ configs:
           config:
             clientID: Ov23lijPj0PQJnlIx2tf
             clientSecret: $dex.github.clientSecret
-            orgs:
-              - name: bigcommerce-labs
   rbac:
     policy.default: role:''
     scopes: '[preferred_username, groups]'
     policy.csv: |
       g, theopsbadger, role:admin
-      g, bigcommerce-labs, role:readonly
       # Add additional GitHub users below:
       # g, <github-username>, role:admin
       # g, <github-username>, role:readonly
