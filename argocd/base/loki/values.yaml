@@ -1,11 +1,23 @@
-# Disable bundled Grafana and Prometheus — already running via kube-prometheus-stack
-grafana:
-  enabled: false
-
-prometheus:
-  enabled: false
+deploymentMode: SingleBinary
 
 loki:
+  commonConfig:
+    replication_factor: 1
+  storage:
+    type: filesystem
+  auth_enabled: false
+  schemaConfig:
+    configs:
+      - from: "2024-01-01"
+        store: tsdb
+        object_store: filesystem
+        schema: v13
+        index:
+          prefix: loki_index_
+          period: 24h
+
+singleBinary:
+  replicas: 1
   resources:
     requests:
       cpu: 50m
@@ -17,11 +29,16 @@ loki:
     enabled: true
     size: 10Gi
 
-promtail:
-  resources:
-    requests:
-      cpu: 10m
-      memory: 32Mi
-    limits:
-      cpu: 100m
-      memory: 128Mi
+# Disable scalable mode components (not needed for single binary)
+backend:
+  replicas: 0
+read:
+  replicas: 0
+write:
+  replicas: 0
+
+# Disable bundled components already running elsewhere
+minio:
+  enabled: false
+grafana-agent-operator:
+  enabled: false
