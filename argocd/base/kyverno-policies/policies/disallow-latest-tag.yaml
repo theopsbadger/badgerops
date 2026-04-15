@@ -35,5 +35,5 @@ spec:
                     operator: Equals
                     value: "*:latest"
                   - key: "{{ element.image }}"
-                    operator: NotContains
-                    value: ":"
+                    operator: NotIn
+                    value: ["*:*"]
