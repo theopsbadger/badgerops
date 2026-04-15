@@ -2,3 +2,17 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
   - ../../../base/consul
+patches:
+  # The consul Helm chart does not set spec.persistentVolumeClaimRetentionPolicy on the
+  # consul-server StatefulSet. Kubernetes 1.27+ defaults this field to Retain after apply,
+  # causing ArgoCD to see the StatefulSet as perpetually OutOfSync. This patch explicitly
+  # sets the field to match what the API server adds.
+  - target:
+      kind: StatefulSet
+      name: consul-server
+    patch: |
+      - op: add
+        path: /spec/persistentVolumeClaimRetentionPolicy
+        value:
+          whenDeleted: Retain
+          whenScaled: Retain

@@ -2,3 +2,27 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
   - ../../../base/istio
+patches:
+  # The istiod Helm chart does not set divisor on GOMEMLIMIT's resourceFieldRef.
+  # The Kubernetes API server defaults resourceFieldRef.divisor to "0" after apply,
+  # causing ArgoCD to see the istiod Deployment as perpetually OutOfSync.
+  # This patch explicitly sets divisor to match what the API server adds.
+  - target:
+      kind: Deployment
+      name: istiod
+    patch: |
+      apiVersion: apps/v1
+      kind: Deployment
+      metadata:
+        name: istiod
+      spec:
+        template:
+          spec:
+            containers:
+              - name: discovery
+                env:
+                  - name: GOMEMLIMIT
+                    valueFrom:
+                      resourceFieldRef:
+                        divisor: "0"
+                        resource: limits.memory
