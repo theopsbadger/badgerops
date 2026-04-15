@@ -1,5 +1,7 @@
 replicaCount: 2
 
+backend: http://podinfo-backend:9898/echo
+
 resources:
   requests:
     cpu: 10m

@@ -10,3 +10,9 @@ helmCharts:
     releaseName: podinfo
     namespace: podinfo
     valuesFile: values.yaml
+  - name: podinfo
+    repo: oci://ghcr.io/stefanprodan/charts
+    version: 6.11.2
+    releaseName: podinfo-backend
+    namespace: podinfo
+    valuesFile: values-backend.yaml
