@@ -34,6 +34,8 @@ grafana:
   grafana.ini:
     server:
       root_url: https://grafana.k8s.badgerops.io
+    explore:
+      enabled: true
     auth.github:
       enabled: true
       allow_sign_up: true
