@@ -12,10 +12,10 @@ httpRoute:
   enabled: true
   annotations:
     argocd.argoproj.io/sync-wave: "1"
-  gatewayRef:
-    name: istio-gateway
-    namespace: istio-gateway
-    sectionName: https
+  parentRefs:
+    - name: istio-gateway
+      namespace: istio-gateway
+      sectionName: https
   hostnames:
     - podinfo.CLUSTER_DOMAIN
 
