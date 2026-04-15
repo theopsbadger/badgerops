@@ -1,0 +1,27 @@
+# Disable bundled Grafana and Prometheus — already running via kube-prometheus-stack
+grafana:
+  enabled: false
+
+prometheus:
+  enabled: false
+
+loki:
+  resources:
+    requests:
+      cpu: 50m
+      memory: 128Mi
+    limits:
+      cpu: 200m
+      memory: 256Mi
+  persistence:
+    enabled: true
+    size: 10Gi
+
+promtail:
+  resources:
+    requests:
+      cpu: 10m
+      memory: 32Mi
+    limits:
+      cpu: 100m
+      memory: 128Mi
