@@ -1,0 +1,30 @@
+replicaCount: 2
+
+resources:
+  requests:
+    cpu: 10m
+    memory: 32Mi
+  limits:
+    cpu: 100m
+    memory: 128Mi
+
+httpRoute:
+  enabled: true
+  annotations:
+    argocd.argoproj.io/sync-wave: "1"
+  gatewayRef:
+    name: istio-gateway
+    namespace: istio-gateway
+    sectionName: https
+  hostnames:
+    - podinfo.CLUSTER_DOMAIN
+
+serviceMonitor:
+  enabled: true
+
+hpa:
+  enabled: true
+  minReplicas: 2
+  maxReplicas: 4
+  cpu: 80
+  memory: 100Mi
