@@ -5,7 +5,9 @@ metadata:
   namespace: istio-gateway
 spec:
   parentRefs:
-    - name: istio-gateway
+    - group: gateway.networking.k8s.io
+      kind: Gateway
+      name: istio-gateway
       namespace: istio-gateway
       sectionName: http
   rules:

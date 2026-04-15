@@ -18,7 +18,9 @@ spec:
       tls:
         mode: Terminate
         certificateRefs:
-          - name: wildcard-k8s-badgerops-io-tls
+          - group: ""
+            kind: Secret
+            name: wildcard-k8s-badgerops-io-tls
       allowedRoutes:
         namespaces:
           from: All

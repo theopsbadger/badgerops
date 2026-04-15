@@ -5,12 +5,17 @@ metadata:
   namespace: argocd
 spec:
   parentRefs:
-    - name: istio-gateway
+    - group: gateway.networking.k8s.io
+      kind: Gateway
+      name: istio-gateway
       namespace: istio-gateway
       sectionName: https
   hostnames:
     - argocd.k8s.badgerops.io
   rules:
     - backendRefs:
-        - name: argocd-server
+        - group: ""
+          kind: Service
+          name: argocd-server
           port: 80
+          weight: 1
