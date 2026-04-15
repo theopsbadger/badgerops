@@ -15,3 +15,8 @@ patches:
         path: /spec/conversion
         value:
           strategy: None
+      # The kyverno main chart renders metadata.labels: {} on these CRDs, but the
+      # kyverno-crds app already owns them with proper labels. Removing labels here
+      # prevents ArgoCD from trying to manage (and conflict with) kyverno-crds' labels.
+      - op: remove
+        path: /metadata/labels
