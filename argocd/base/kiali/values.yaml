@@ -1,0 +1,20 @@
+deployment:
+  resources:
+    requests:
+      cpu: 10m
+      memory: 64Mi
+    limits:
+      cpu: 500m
+      memory: 512Mi
+
+auth:
+  strategy: anonymous
+
+external_services:
+  prometheus:
+    url: http://kube-prometheus-stack-prometheus.monitoring:9090
+  grafana:
+    enabled: true
+    url: http://kube-prometheus-stack-grafana.monitoring:80
+  tracing:
+    enabled: false
