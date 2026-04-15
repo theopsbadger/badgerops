@@ -12,6 +12,7 @@ spec:
   background: true
   rules:
     - name: check-container-resources
+      skipBackgroundRequests: true
       match:
         any:
           - resources:
@@ -26,6 +27,7 @@ spec:
                       - kyverno
                       - argocd
       validate:
+        allowExistingViolations: true
         message: "All containers must have CPU and memory limits defined."
         pattern:
           spec:

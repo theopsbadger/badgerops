@@ -12,6 +12,7 @@ spec:
   background: true
   rules:
     - name: check-labels
+      skipBackgroundRequests: true
       match:
         any:
           - resources:
@@ -31,6 +32,7 @@ spec:
                       - istio-system
                       - istio-gateway
       validate:
+        allowExistingViolations: true
         message: "Deployments must have 'app' and 'version' labels."
         pattern:
           metadata:
