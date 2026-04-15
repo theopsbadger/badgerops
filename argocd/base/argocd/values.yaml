@@ -32,7 +32,7 @@ repoServer:
       memory: 256Mi
     limits:
       cpu: 1000m
-      memory: 512Mi
+      memory: 1Gi
 
 applicationSet:
   resources:
@@ -55,8 +55,8 @@ controller:
 server:
   resources:
     requests:
-      cpu: 10m
-      memory: 128Mi
+      cpu: 50m
+      memory: 256Mi
     limits:
-      cpu: 200m
-      memory: 512Mi
+      cpu: 500m
+      memory: 1Gi

@@ -15,7 +15,9 @@ httpRoute:
   annotations:
     argocd.argoproj.io/sync-wave: "1"
   parentRefs:
-    - name: istio-gateway
+    - group: gateway.networking.k8s.io
+      kind: Gateway
+      name: istio-gateway
       namespace: istio-gateway
       sectionName: https
   hostnames:
