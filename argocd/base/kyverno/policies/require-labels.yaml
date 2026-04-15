@@ -1,0 +1,39 @@
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: require-labels
+  annotations:
+    policies.kyverno.io/title: Require Labels
+    policies.kyverno.io/description: >
+      Requires all workloads to have 'app' and 'version' labels to ensure
+      consistent labelling for Istio traffic management and observability.
+spec:
+  validationFailureAction: Audit
+  background: true
+  rules:
+    - name: check-labels
+      match:
+        any:
+          - resources:
+              kinds:
+                - Deployment
+              namespaceSelector:
+                matchExpressions:
+                  - key: kubernetes.io/metadata.name
+                    operator: NotIn
+                    values:
+                      - kube-system
+                      - kyverno
+                      - argocd
+                      - monitoring
+                      - cert-manager
+                      - external-secrets
+                      - istio-system
+                      - istio-gateway
+      validate:
+        message: "Deployments must have 'app' and 'version' labels."
+        pattern:
+          metadata:
+            labels:
+              app: "?*"
+              version: "?*"
