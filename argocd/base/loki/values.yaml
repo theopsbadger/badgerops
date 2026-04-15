@@ -37,8 +37,12 @@ read:
 write:
   replicas: 0
 
-# Disable bundled components already running elsewhere
+# Disable bundled components not needed for homelab
 minio:
   enabled: false
 grafana-agent-operator:
+  enabled: false
+chunksCache:
+  enabled: false
+resultsCache:
   enabled: false
