@@ -39,12 +39,11 @@ grafana:
       allow_sign_up: false
       client_id: Ov23liJ66WsUgHOWtmox
       allowed_logins: theopsbadger
-  env:
+  envValueFrom:
     GF_AUTH_GITHUB_CLIENT_SECRET:
-      valueFrom:
-        secretKeyRef:
-          name: grafana-admin
-          key: github-client-secret
+      secretKeyRef:
+        name: grafana-admin
+        key: github-client-secret
 
 prometheusOperator:
   resources:
