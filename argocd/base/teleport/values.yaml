@@ -1,0 +1,21 @@
+roles: kube,app,discovery
+proxyAddr: wispy-sunset.trial.teleport.sh:443
+kubeClusterName: badgerops
+
+# Token is provided via ExternalSecret → teleport-kube-agent-join-token
+secretName: teleport-kube-agent-join-token
+
+labels:
+  teleport.internal/resource-id: 8abd406b-ca9f-4459-93af-c930ade3f56f
+
+enterprise: true
+
+updater:
+  enabled: true
+  releaseChannel: "stable/cloud"
+
+highAvailability:
+  replicaCount: 2
+  podDisruptionBudget:
+    enabled: true
+    minAvailable: 1
