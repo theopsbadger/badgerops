@@ -1,0 +1,12 @@
+# This app must be deployed AFTER kyverno is synced and healthy.
+# Kyverno CRDs (ClusterPolicy etc.) must exist before these resources
+# can be applied — same pattern as prometheus-operator-crds/kube-prometheus-stack.
+#
+# DO NOT merge this into the kyverno app.
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: kyverno
+resources:
+  - policies/require-resource-limits.yaml
+  - policies/disallow-latest-tag.yaml
+  - policies/require-labels.yaml

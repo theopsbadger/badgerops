@@ -39,3 +39,4 @@ spec:
         syncOptions:
           - CreateNamespace=true
           - SkipDryRunOnMissingResource=true
+          - ServerSideApply=true
