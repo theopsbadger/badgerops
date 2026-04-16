@@ -18,6 +18,7 @@ configs:
     scopes: '[preferred_username, groups]'
     policy.csv: |
       g, theopsbadger, role:admin
+      g, solofeed, role:readonly
       # Add additional GitHub users below:
       # g, <github-username>, role:admin
       # g, <github-username>, role:readonly
