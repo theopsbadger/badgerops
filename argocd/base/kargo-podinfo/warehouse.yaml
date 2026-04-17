@@ -9,3 +9,5 @@ spec:
         repoURL: ghcr.io/stefanprodan/podinfo
         semverConstraint: ">=6.0.0"
         discoveryLimit: 10
+        imageSelectionStrategy: SemVer
+        strictSemvers: true
