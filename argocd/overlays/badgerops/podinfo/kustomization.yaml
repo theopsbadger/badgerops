@@ -4,6 +4,16 @@ resources:
 - ../../../base/podinfo
 patches:
 - target:
+    kind: HorizontalPodAutoscaler
+    name: podinfo
+  patch: |
+    - op: replace
+      path: /spec/minReplicas
+      value: 10
+    - op: replace
+      path: /spec/maxReplicas
+      value: 20
+- target:
     group: gateway.networking.k8s.io
     kind: HTTPRoute
     name: podinfo
