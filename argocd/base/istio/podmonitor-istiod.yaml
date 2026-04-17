@@ -1,0 +1,15 @@
+# Scrapes istiod control plane metrics (port 15014) so Grafana Istio
+# dashboards have data for pilot, xDS push rates, config distribution, etc.
+# Without this, the Istio Control Plane dashboard shows "No data".
+apiVersion: monitoring.coreos.com/v1
+kind: PodMonitor
+metadata:
+  name: istiod
+  namespace: istio-system
+spec:
+  selector:
+    matchLabels:
+      app: istiod
+  podMetricsEndpoints:
+    - port: http-monitoring  # port 15014
+      path: /metrics

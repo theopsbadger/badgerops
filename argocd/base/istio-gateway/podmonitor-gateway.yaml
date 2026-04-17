@@ -1,0 +1,16 @@
+# Scrapes Envoy proxy metrics from the ingress gateway pod (port 15090).
+# The gateway pod IS the Envoy proxy — it has no sidecar — so this is the
+# only source of request/error/latency metrics for inbound traffic.
+# Required for Grafana Istio Mesh and Istio Service dashboards.
+apiVersion: monitoring.coreos.com/v1
+kind: PodMonitor
+metadata:
+  name: istio-gateway
+  namespace: istio-gateway
+spec:
+  selector:
+    matchLabels:
+      gateway.networking.k8s.io/gateway-name: istio-gateway
+  podMetricsEndpoints:
+    - port: http-envoy-prom  # port 15090
+      path: /stats/prometheus
