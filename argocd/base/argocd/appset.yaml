@@ -32,6 +32,10 @@ spec:
           kind: MutatingWebhookConfiguration
           jqPathExpressions:
             - .webhooks[]?.failurePolicy
+        - group: ""
+          kind: Service
+          jsonPointers:
+            - /spec/loadBalancerSourceRanges
       syncPolicy:
         automated:
           prune: true
