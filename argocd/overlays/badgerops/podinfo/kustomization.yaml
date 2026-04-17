@@ -39,4 +39,4 @@ patches:
       value: Service
 images:
 - name: ghcr.io/stefanprodan/podinfo
-  newTag: 6.11.0
+  newTag: 6.11.2
