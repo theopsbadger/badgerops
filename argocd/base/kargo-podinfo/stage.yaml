@@ -4,8 +4,12 @@ metadata:
   name: badgerops
   namespace: demo
 spec:
-  subscriptions:
-    warehouse: podinfo
+  requestedFreight:
+    - origin:
+        kind: Warehouse
+        name: podinfo
+      sources:
+        direct: true
   promotionTemplate:
     spec:
       steps:
