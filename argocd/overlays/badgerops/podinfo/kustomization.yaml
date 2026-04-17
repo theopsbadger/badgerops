@@ -1,21 +1,24 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
-  - ../../../base/podinfo
+- ../../../base/podinfo
 patches:
-  - target:
-      group: gateway.networking.k8s.io
-      kind: HTTPRoute
-      name: podinfo
-    patch: |
-      - op: replace
-        path: /spec/hostnames/0
-        value: podinfo.k8s.badgerops.io
-      # The Gateway API controller defaults group and kind on backendRefs after apply.
-      # Setting them explicitly prevents ArgoCD drift.
-      - op: add
-        path: /spec/rules/0/backendRefs/0/group
-        value: ""
-      - op: add
-        path: /spec/rules/0/backendRefs/0/kind
-        value: Service
+- target:
+    group: gateway.networking.k8s.io
+    kind: HTTPRoute
+    name: podinfo
+  patch: |
+    - op: replace
+      path: /spec/hostnames/0
+      value: podinfo.k8s.badgerops.io
+    # The Gateway API controller defaults group and kind on backendRefs after apply.
+    # Setting them explicitly prevents ArgoCD drift.
+    - op: add
+      path: /spec/rules/0/backendRefs/0/group
+      value: ""
+    - op: add
+      path: /spec/rules/0/backendRefs/0/kind
+      value: Service
+images:
+- name: ghcr.io/stefanprodan/podinfo
+  newTag: 6.11.0
