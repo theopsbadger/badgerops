@@ -1,0 +1,32 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Rollout
+metadata:
+  name: podinfo
+  namespace: podinfo
+spec:
+  workloadRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: podinfo
+    scaleDown: argo-rollouts
+  strategy:
+    canary:
+      steps:
+        - setWeight: 10
+        - pause: {}
+        - setWeight: 20
+        - pause: {}
+        - setWeight: 30
+        - pause: {}
+        - setWeight: 40
+        - pause: {}
+        - setWeight: 50
+        - pause: {}
+        - setWeight: 60
+        - pause: {}
+        - setWeight: 70
+        - pause: {}
+        - setWeight: 80
+        - pause: {}
+        - setWeight: 90
+        - pause: {}

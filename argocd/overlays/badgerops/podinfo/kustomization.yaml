@@ -2,6 +2,7 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
 - ../../../base/podinfo
+- rollout.yaml
 patches:
 - target:
     kind: HorizontalPodAutoscaler
@@ -13,6 +14,12 @@ patches:
     - op: replace
       path: /spec/maxReplicas
       value: 20
+    - op: replace
+      path: /spec/scaleTargetRef/apiVersion
+      value: argoproj.io/v1alpha1
+    - op: replace
+      path: /spec/scaleTargetRef/kind
+      value: Rollout
 - target:
     group: gateway.networking.k8s.io
     kind: HTTPRoute
