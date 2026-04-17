@@ -3,6 +3,9 @@ configs:
     server.insecure: true
   cm:
     kustomize.buildOptions: --enable-helm
+    # kube-prometheus-stack is a large chart and takes >90s to render under load.
+    # Default exec timeout is 90s — bumping to 300s prevents DeadlineExceeded.
+    exec.timeout: 300s
     admin.enabled: "false"
     url: https://argocd.k8s.badgerops.io
     dex.config: |
@@ -31,7 +34,7 @@ repoServer:
       cpu: 100m
       memory: 256Mi
     limits:
-      cpu: 1000m
+      cpu: 2000m
       memory: 1Gi
 
 applicationSet:
