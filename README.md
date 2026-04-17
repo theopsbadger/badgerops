@@ -16,6 +16,7 @@ A GKE-based homelab Kubernetes cluster with a full GitOps stack running on GCP.
 | Component | Version | Purpose |
 |---|---|---|
 | **ArgoCD** | 9.5.0 (Helm) | GitOps controller — manages all apps via ApplicationSet |
+| **Kargo** | 1.9.0 (Helm) | Promotion engine — moves Freight (images, commits) across Stages |
 | **Istio** | 1.24.3 | Service mesh, north-south ingress via Kubernetes Gateway API |
 | **cert-manager** | — | Automated TLS certificates via Cloudflare DNS-01 |
 | **External Secrets Operator** | — | Syncs secrets from GCP Secret Manager |
@@ -31,7 +32,8 @@ A GKE-based homelab Kubernetes cluster with a full GitOps stack running on GCP.
 ### Applications
 | App | URL | Notes |
 |---|---|---|
-| **ArgoCD** | argocd.k8s.badgerops.io | GitHub SSO via Dex |
+| **ArgoCD** | argocd.k8s.badgerops.io | GitHub SSO via Dex — any GitHub user gets readonly, admins explicit |
+| **Kargo** | kargo.k8s.badgerops.io | GitHub SSO via Dex — promotion UI |
 | **Grafana** | grafana.k8s.badgerops.io | GitHub SSO, includes custom dashboards |
 | **Kiali** | kiali.k8s.badgerops.io | Istio mesh topology |
 | **podinfo** | podinfo.k8s.badgerops.io | Demo app with backend ping, HPA, ServiceMonitor |
@@ -67,7 +69,9 @@ A GKE-based homelab Kubernetes cluster with a full GitOps stack running on GCP.
     │   ├── podinfo/            # podinfo + podinfo-backend Helm charts
     │   ├── online-boutique/    # 11-service microservices demo
     │   ├── argo-rollouts/      # Argo Rollouts controller + dashboard
-    │   └── bookinfo/           # Istio bookinfo sample
+    │   ├── bookinfo/           # Istio bookinfo sample
+    │   ├── kargo/              # Kargo install (API, controller, Dex SSO, HTTPRoute)
+    │   └── kargo-podinfo/      # Kargo demo project (Warehouse + Stage for podinfo)
     │
     └── overlays/
         └── badgerops/          # Cluster-specific patches (one dir per app)
@@ -141,10 +145,18 @@ The following secrets must exist before the apps that use them can become health
 | Secret name | Used by |
 |---|---|
 | `argocd-github-client-secret` | ArgoCD GitHub SSO (Dex) |
+| `argocd-dex-github-client-id` | ArgoCD GitHub SSO (Dex) |
 | `cloudflare-api-token` | cert-manager DNS-01 challenge |
 | `grafana-admin-password` | Grafana admin login |
 | `grafana-admin-user` | Grafana admin login |
 | `grafana-github-client-secret` | Grafana GitHub SSO |
+| `kargo-admin-password-hash` | Kargo admin account (bcrypt hash) |
+| `kargo-admin-token-signing-key` | Kargo JWT signing |
+| `kargo-dex-github-client-id` | Kargo GitHub SSO (Dex) |
+| `kargo-dex-github-client-secret` | Kargo GitHub SSO (Dex) |
+| `kargo-git-token` | Kargo git push (promotion commits) |
+| `kargo-git-repo-url` | Kargo git credentials |
+| `kargo-git-username` | Kargo git credentials |
 
 ### 6. Configure DNS
 
@@ -167,6 +179,27 @@ git add . && git commit -m "update podinfo replicas" && git push
 ```
 
 ArgoCD is configured with `selfHeal: true` and `prune: true`.
+
+## Kargo promotion workflow
+
+Kargo manages image promotions via a GitOps-native flow — it commits image tag changes to git and ArgoCD picks them up automatically.
+
+**Concepts:**
+- **Warehouse** — watches a container registry for new image tags (semver filtered)
+- **Freight** — a discovered image version, ready to promote
+- **Stage** — a target environment; subscribes to a Warehouse or upstream Stage
+- **Promotion** — executes a sequence of steps: git-clone → kustomize-set-image → git-commit → git-push
+
+**Demo project (`demo`):**
+The `kargo-podinfo` app defines a Warehouse watching `ghcr.io/stefanprodan/podinfo` and a single Stage (`badgerops`) that targets `argocd/overlays/badgerops/podinfo/`. Promoting a version commits an `images:` override to the overlay's `kustomization.yaml` and ArgoCD syncs the new tag within ~3 minutes.
+
+**To promote:**
+1. Open `https://kargo.k8s.badgerops.io` → log in with GitHub
+2. Open the `demo` project
+3. Click a piece of Freight in the `podinfo` Warehouse
+4. Click **Promote to Stage** → select `badgerops` → confirm
+
+**Firewall note:** `loadBalancerSourceRanges` on the Istio gateway LB restricts access to specific IPs. The 4 office IPs are managed in git (`argocd/overlays/badgerops/istio-gateway/lb-source-ranges.yaml`). Additional IPs (e.g. home) must be added manually via `kubectl patch` — ArgoCD is configured to ignore this field so manual additions persist across syncs.
 
 ## Notes
 
