@@ -17,20 +17,20 @@ spec:
         startingStep: 1
       steps:
         - setWeight: 10
-        - pause: {}
+        - pause: {duration: 15s}
         - setWeight: 20
-        - pause: {}
+        - pause: {duration: 15s}
         - setWeight: 30
-        - pause: {}
+        - pause: {duration: 15s}
         - setWeight: 40
-        - pause: {}
+        - pause: {duration: 15s}
         - setWeight: 50
-        - pause: {}
+        - pause: {duration: 15s}
         - setWeight: 60
-        - pause: {}
+        - pause: {duration: 15s}
         - setWeight: 70
-        - pause: {}
+        - pause: {duration: 15s}
         - setWeight: 80
-        - pause: {}
+        - pause: {duration: 15s}
         - setWeight: 90
-        - pause: {}
+        - pause: {duration: 15s}
