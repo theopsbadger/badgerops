@@ -24,6 +24,7 @@ spec:
             path: ./repo/argocd/overlays/badgerops/podinfo
             images:
               - image: ghcr.io/stefanprodan/podinfo
+                tag: ${{ imageFrom("ghcr.io/stefanprodan/podinfo").Tag }}
         - uses: git-commit
           as: commit
           config:
