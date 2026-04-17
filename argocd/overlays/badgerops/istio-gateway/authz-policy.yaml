@@ -6,7 +6,7 @@ metadata:
 spec:
   selector:
     matchLabels:
-      app: istio-gateway
+      gateway.networking.k8s.io/gateway-name: istio-gateway
   action: ALLOW
   rules:
     - from:
