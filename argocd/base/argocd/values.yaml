@@ -11,15 +11,13 @@ configs:
           id: github
           name: GitHub
           config:
-            clientID: Ov23lijPj0PQJnlIx2tf
+            clientID: $dex.github.clientId
             clientSecret: $dex.github.clientSecret
   rbac:
-    policy.default: role:''
+    policy.default: role:readonly
     scopes: '[preferred_username, groups]'
     policy.csv: |
       g, theopsbadger, role:admin
-      g, solofeed, role:readonly
-      g, bc-divyasanghvi, role:readonly
       # Add additional GitHub users below:
       # g, <github-username>, role:admin
       # g, <github-username>, role:readonly

@@ -1,0 +1,31 @@
+apiVersion: kargo.akuity.io/v1alpha1
+kind: Stage
+metadata:
+  name: badgerops
+  namespace: demo
+spec:
+  subscriptions:
+    warehouse: podinfo
+  promotionTemplate:
+    spec:
+      steps:
+        - uses: git-clone
+          config:
+            repoURL: https://github.com/theopsbadger/badgerops.git
+            checkout:
+              - branch: main
+                path: ./repo
+        - uses: kustomize-set-image
+          config:
+            path: ./repo/argocd/overlays/badgerops/podinfo
+            images:
+              - image: ghcr.io/stefanprodan/podinfo
+        - uses: git-commit
+          as: commit
+          config:
+            path: ./repo
+            message: "chore: promote podinfo ${{ imageFrom(\"ghcr.io/stefanprodan/podinfo\").Tag }}"
+        - uses: git-push
+          config:
+            path: ./repo
+            targetBranch: main

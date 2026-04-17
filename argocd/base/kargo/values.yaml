@@ -1,0 +1,72 @@
+api:
+  host: kargo.k8s.badgerops.io
+
+  tls:
+    enabled: false
+    terminatedUpstream: true
+
+  # Admin credentials sourced from ExternalSecret → kargo-secrets
+  # Secret must contain ADMIN_ACCOUNT_PASSWORD_HASH and ADMIN_ACCOUNT_TOKEN_SIGNING_KEY
+  secret:
+    name: kargo-secrets
+
+  adminAccount:
+    enabled: true
+
+  oidc:
+    enabled: true
+    additionalScopes:
+      - groups
+    usernameClaim: preferred_username
+    admins:
+      claims:
+        preferred_username:
+          - theopsbadger
+
+    dex:
+      enabled: true
+      skipApprovalScreen: true
+      connectors:
+        - type: github
+          id: github
+          name: GitHub
+          config:
+            clientID: $DEX_GITHUB_CLIENT_ID
+            clientSecret: $DEX_GITHUB_CLIENT_SECRET
+            redirectURI: https://kargo.k8s.badgerops.io/dex/callback
+      envFrom:
+        - secretRef:
+            name: kargo-secrets
+
+  argocd:
+    urls:
+      "": https://argocd.k8s.badgerops.io
+
+  rollouts:
+    integrationEnabled: false
+
+  resources:
+    requests:
+      cpu: 100m
+      memory: 128Mi
+    limits:
+      cpu: 500m
+      memory: 512Mi
+
+controller:
+  resources:
+    requests:
+      cpu: 100m
+      memory: 128Mi
+    limits:
+      cpu: 500m
+      memory: 512Mi
+
+webhooksServer:
+  resources:
+    requests:
+      cpu: 50m
+      memory: 64Mi
+    limits:
+      cpu: 200m
+      memory: 256Mi
