@@ -1,0 +1,19 @@
+apiVersion: argoproj.io/v1alpha1
+kind: AnalysisTemplate
+metadata:
+  name: podinfo-error-rate
+  namespace: podinfo
+spec:
+  metrics:
+    - name: error-rate
+      interval: 1m
+      failureLimit: 3
+      # NaN means not enough traffic yet — treat as success to avoid false positives
+      successCondition: isNaN(result[0]) || result[0] <= 0.05
+      provider:
+        prometheus:
+          address: http://prometheus-operated.monitoring.svc.cluster.local:9090
+          query: |
+            sum(rate(http_requests_total{namespace="podinfo",path="/",status=~"5.."}[2m]))
+            /
+            sum(rate(http_requests_total{namespace="podinfo",path="/"}[2m]))

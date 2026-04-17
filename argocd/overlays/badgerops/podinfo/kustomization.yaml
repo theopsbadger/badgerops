@@ -3,6 +3,7 @@ kind: Kustomization
 resources:
 - ../../../base/podinfo
 - rollout.yaml
+- analysis-template.yaml
 patches:
 - target:
     kind: HorizontalPodAutoscaler

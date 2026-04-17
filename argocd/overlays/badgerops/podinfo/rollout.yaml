@@ -11,6 +11,10 @@ spec:
     scaleDown: argo-rollouts
   strategy:
     canary:
+      analysis:
+        templates:
+          - templateName: podinfo-error-rate
+        startingStep: 1
       steps:
         - setWeight: 10
         - pause: {}
