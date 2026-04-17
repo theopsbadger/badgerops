@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: istio-gateway-istio
+  namespace: istio-gateway
+spec:
+  loadBalancerSourceRanges:
+    - 8.29.230.139/32
+    - 8.29.230.140/32
+    - 8.29.231.139/32
+    - 8.29.231.140/32
