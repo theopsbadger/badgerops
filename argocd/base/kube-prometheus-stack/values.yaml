@@ -4,12 +4,16 @@ prometheus:
     # By default kube-prometheus-stack only scrapes ServiceMonitors/PodMonitors
     # with the label release: kube-prometheus-stack. Third-party charts (podinfo,
     # istio, etc.) ship their own monitors without that label, so they get silently
-    # ignored. Setting these to {} tells Prometheus to discover all monitors
-    # across all namespaces regardless of labels.
+    # ignored. Setting these to {} with NilUsesHelmValues=false tells Prometheus
+    # to discover all monitors across all namespaces regardless of labels.
     serviceMonitorSelector: {}
     serviceMonitorNamespaceSelector: {}
     podMonitorSelector: {}
     podMonitorNamespaceSelector: {}
+    # Without these false flags, the chart overrides the empty selectors above
+    # back to {matchLabels: {release: kube-prometheus-stack}}.
+    serviceMonitorSelectorNilUsesHelmValues: false
+    podMonitorSelectorNilUsesHelmValues: false
     resources:
       requests:
         cpu: 100m
