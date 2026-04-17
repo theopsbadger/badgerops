@@ -1,0 +1,24 @@
+apiVersion: security.istio.io/v1beta1
+kind: AuthorizationPolicy
+metadata:
+  name: ingress-allowlist
+  namespace: istio-gateway
+spec:
+  selector:
+    matchLabels:
+      app: istio-gateway
+  action: ALLOW
+  rules:
+    - from:
+        - source:
+            remoteIpBlocks:
+              # Cloudflare IPs
+              - 8.29.230.139/32
+              - 8.29.230.140/32
+              - 8.29.231.139/32
+              - 8.29.231.140/32
+              # GitHub webhook IPs (https://api.github.com/meta hooks field)
+              - 192.30.252.0/22
+              - 185.199.108.0/22
+              - 140.82.112.0/20
+              - 143.55.64.0/20
