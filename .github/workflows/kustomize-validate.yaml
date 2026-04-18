@@ -1,0 +1,70 @@
+name: Validate Kustomize
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
+
+jobs:
+  build:
+    name: kustomize build + kubeconform
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install kustomize
+        run: |
+          curl -sL "https://raw.githubusercontent.com/kubernetes-sigs/kustomize/master/hack/install_kustomize.sh" | bash
+          sudo mv kustomize /usr/local/bin/
+
+      - name: Install kubeconform
+        run: |
+          curl -sL https://github.com/yannh/kubeconform/releases/latest/download/kubeconform-linux-amd64.tar.gz \
+            | tar xz && sudo mv kubeconform /usr/local/bin/
+
+      - name: Install helm (required for --enable-helm)
+        run: |
+          curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
+
+      - name: Build and validate all overlays
+        run: |
+          set -e
+          OVERLAYS=$(find argocd/overlays/badgerops -mindepth 1 -maxdepth 1 -type d | sort)
+          FAILED=()
+
+          for overlay in $OVERLAYS; do
+            name=$(basename "$overlay")
+            echo "::group::$name"
+
+            # Build the overlay — this catches render errors (missing patches, bad fields, etc.)
+            if ! kustomize build --enable-helm "$overlay" > /tmp/manifest.yaml 2>&1; then
+              echo "::error::kustomize build failed for $name"
+              cat /tmp/manifest.yaml
+              FAILED+=("$name (build)")
+              echo "::endgroup::"
+              continue
+            fi
+
+            # Validate against Kubernetes schemas — catches wrong field names/types.
+            # Skip unknown resources (CRDs) rather than failing on them.
+            if ! kubeconform \
+              -strict \
+              -ignore-missing-schemas \
+              -kubernetes-version 1.31.0 \
+              -summary \
+              /tmp/manifest.yaml; then
+              echo "::error::kubeconform failed for $name"
+              FAILED+=("$name (schema)")
+            fi
+
+            echo "::endgroup::"
+          done
+
+          if [ ${#FAILED[@]} -gt 0 ]; then
+            echo ""
+            echo "Failed overlays: ${FAILED[*]}"
+            exit 1
+          fi
+
+          echo "All overlays valid."
