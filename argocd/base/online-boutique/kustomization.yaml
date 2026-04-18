@@ -16,3 +16,22 @@ resources:
   - recommendationservice.yaml
   - redis-cart.yaml
   - shippingservice.yaml
+patches:
+  # Reduce istio-proxy sidecar resource requests on all Deployments.
+  # Default requests (100m CPU / 128Mi memory) push cluster CPU requests to
+  # ~95% despite low actual usage (~27%), preventing pods from scheduling.
+  - target:
+      kind: Deployment
+    patch: |
+      - op: add
+        path: /spec/template/metadata/annotations/sidecar.istio.io~1proxyCPU
+        value: "10m"
+      - op: add
+        path: /spec/template/metadata/annotations/sidecar.istio.io~1proxyMemory
+        value: "64Mi"
+      - op: add
+        path: /spec/template/metadata/annotations/sidecar.istio.io~1proxyCPULimit
+        value: "200m"
+      - op: add
+        path: /spec/template/metadata/annotations/sidecar.istio.io~1proxyMemoryLimit
+        value: "256Mi"

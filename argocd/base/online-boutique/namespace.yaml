@@ -6,11 +6,3 @@ metadata:
     istio-injection: enabled
   annotations:
     argocd.argoproj.io/sync-wave: "-1"
-    # Lower sidecar CPU/memory requests from defaults (100m/128Mi) since actual
-    # usage is well below that. Cluster CPU requests are near capacity so the
-    # default requests prevent pods from scheduling despite low actual usage.
-    proxy.istio.io/config: '{"proxyMetadata":{}}'
-    sidecar.istio.io/proxyCPU: "10m"
-    sidecar.istio.io/proxyMemory: "64Mi"
-    sidecar.istio.io/proxyCPULimit: "200m"
-    sidecar.istio.io/proxyMemoryLimit: "256Mi"
