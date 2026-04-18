@@ -23,15 +23,15 @@ patches:
   - target:
       kind: Deployment
     patch: |
-      - op: add
-        path: /spec/template/metadata/annotations/sidecar.istio.io~1proxyCPU
-        value: "10m"
-      - op: add
-        path: /spec/template/metadata/annotations/sidecar.istio.io~1proxyMemory
-        value: "64Mi"
-      - op: add
-        path: /spec/template/metadata/annotations/sidecar.istio.io~1proxyCPULimit
-        value: "200m"
-      - op: add
-        path: /spec/template/metadata/annotations/sidecar.istio.io~1proxyMemoryLimit
-        value: "256Mi"
+      apiVersion: apps/v1
+      kind: Deployment
+      metadata:
+        name: placeholder
+      spec:
+        template:
+          metadata:
+            annotations:
+              sidecar.istio.io/proxyCPU: "10m"
+              sidecar.istio.io/proxyMemory: "64Mi"
+              sidecar.istio.io/proxyCPULimit: "200m"
+              sidecar.istio.io/proxyMemoryLimit: "256Mi"
