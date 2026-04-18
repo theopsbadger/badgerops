@@ -3,6 +3,9 @@ global:
 syncCatalog:
   enabled: true
 connectInject:
-  enabled: false
+  enabled: true
   apiGateway:
     manageExternalCRDs: false
+meshGateway:
+  enabled: true
+  replicas: 1
