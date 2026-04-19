@@ -187,8 +187,19 @@ exchange_istio_secrets() {
 # Main
 # =============================================================================
 main() {
-  local exchange_secrets=false
-  [[ "${1:-}" == "--exchange-secrets" ]] && exchange_secrets=true
+  # --exchange-secrets is a post-bootstrap step run after ArgoCD has deployed
+  # Istio. Skip cluster/Cilium/ArgoCD setup entirely — just do the exchange.
+  if [[ "${1:-}" == "--exchange-secrets" ]]; then
+    exchange_istio_secrets
+    echo ""
+    echo "============================================================"
+    echo " Setup complete — both clusters are in the mesh."
+    echo ""
+    echo " Verify mesh:     istioctl remote-clusters --context=${CTX1}"
+    echo " Simulate failure: docker stop ${CLUSTER1}-worker"
+    echo "============================================================"
+    return
+  fi
 
   check_prereqs
   create_clusters
@@ -205,30 +216,17 @@ main() {
   install_argocd "${CTX1}" "argocd/overlays/kind-cluster1/argocd"
   install_argocd "${CTX2}" "argocd/overlays/kind-cluster2/argocd"
 
-  if "${exchange_secrets}"; then
-    exchange_istio_secrets
-  fi
-
   echo ""
   echo "============================================================"
-  if "${exchange_secrets}"; then
-    echo " Setup complete — both clusters are in the mesh."
-  else
-    echo " ArgoCD is running on both clusters."
-    echo " ApplicationSets are deploying: gateway-api-crds, metallb,"
-    echo " cilium, istio, istio-eastwest. This takes a few minutes."
-  fi
+  echo " ArgoCD is running on both clusters."
+  echo " ApplicationSets are deploying: gateway-api-crds, metallb,"
+  echo " cilium, istio, istio-eastwest. This takes a few minutes."
   echo ""
   echo " Watch cluster1:  kubectl --context=${CTX1} get applications -n argocd"
   echo " Watch cluster2:  kubectl --context=${CTX2} get applications -n argocd"
   echo ""
-  if ! "${exchange_secrets}"; then
-    echo " Once Istio is healthy on both clusters, complete the mesh:"
-    echo "   ${SCRIPT_DIR}/bootstrap.sh --exchange-secrets"
-    echo ""
-  fi
-  echo " Verify mesh:     istioctl remote-clusters --context=${CTX1}"
-  echo " Simulate failure: docker stop ${CLUSTER1}-worker"
+  echo " Once Istio is healthy on both clusters, complete the mesh:"
+  echo "   ${SCRIPT_DIR}/bootstrap.sh --exchange-secrets"
   echo "============================================================"
 }
 
