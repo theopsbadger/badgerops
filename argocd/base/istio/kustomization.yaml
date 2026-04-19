@@ -2,16 +2,17 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 namespace: istio-system
 resources:
+  - namespace.yaml
   - podmonitor-istiod.yaml
 helmCharts:
   - name: base
     repo: https://istio-release.storage.googleapis.com/charts
-    version: 1.24.3
+    version: 1.29.2
     releaseName: istio-base
     namespace: istio-system
   - name: istiod
     repo: https://istio-release.storage.googleapis.com/charts
-    version: 1.24.3
+    version: 1.29.2
     releaseName: istiod
     namespace: istio-system
     valuesFile: values.yaml
