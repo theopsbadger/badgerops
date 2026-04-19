@@ -1,0 +1,55 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: istio-system
+helmCharts:
+  - name: base
+    repo: https://istio-release.storage.googleapis.com/charts
+    version: 1.29.2
+    releaseName: istio-base
+    namespace: istio-system
+  - name: istiod
+    repo: https://istio-release.storage.googleapis.com/charts
+    version: 1.29.2
+    releaseName: istiod
+    namespace: istio-system
+    valuesInline:
+      pilot:
+        resources:
+          requests:
+            cpu: 100m
+            memory: 256Mi
+          limits:
+            cpu: 500m
+            memory: 512Mi
+      global:
+        meshID: mesh1
+        multiCluster:
+          enabled: true
+          clusterName: cluster2
+        network: network2
+      meshConfig:
+        accessLogFile: /dev/stdout
+        defaultConfig:
+          proxyMetadata:
+            ISTIO_META_DNS_CAPTURE: "true"
+            ISTIO_META_DNS_AUTO_ALLOCATE: "true"
+patches:
+  - target:
+      kind: Deployment
+      name: istiod
+    patch: |
+      apiVersion: apps/v1
+      kind: Deployment
+      metadata:
+        name: istiod
+      spec:
+        template:
+          spec:
+            containers:
+              - name: discovery
+                env:
+                  - name: GOMEMLIMIT
+                    valueFrom:
+                      resourceFieldRef:
+                        divisor: "0"
+                        resource: limits.memory

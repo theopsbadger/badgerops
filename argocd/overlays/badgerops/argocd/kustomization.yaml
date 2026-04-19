@@ -2,3 +2,41 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
   - ../../../base/argocd
+  # GKE-specific resources — not included in base so kind overlays don't inherit them
+  - ../../../base/argocd/appset.yaml
+  - ../../../base/argocd/argocd-httproute.yaml
+  - ../../../base/argocd/externalsecret-argocd.yaml
+patches:
+  # GKE-specific ArgoCD config: SSO disabled for local admin, GitHub Dex, RBAC
+  - target:
+      kind: ConfigMap
+      name: argocd-cm
+    patch: |
+      apiVersion: v1
+      kind: ConfigMap
+      metadata:
+        name: argocd-cm
+      data:
+        admin.enabled: "false"
+        url: https://argocd.k8s.badgerops.io
+        dex.config: |
+          connectors:
+            - type: github
+              id: github
+              name: GitHub
+              config:
+                clientID: $dex.github.clientId
+                clientSecret: $dex.github.clientSecret
+  - target:
+      kind: ConfigMap
+      name: argocd-rbac-cm
+    patch: |
+      apiVersion: v1
+      kind: ConfigMap
+      metadata:
+        name: argocd-rbac-cm
+      data:
+        policy.default: role:readonly
+        scopes: '[preferred_username, groups]'
+        policy.csv: |
+          g, theopsbadger, role:admin

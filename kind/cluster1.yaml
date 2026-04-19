@@ -1,0 +1,20 @@
+kind: Cluster
+apiVersion: kind.x-k8s.io/v1alpha4
+name: cluster1
+networking:
+  disableDefaultCNI: true   # Cilium replaces kindnet
+  podSubnet: "10.10.0.0/16"
+  serviceSubnet: "10.20.0.0/16"
+nodes:
+  - role: control-plane
+    image: kindest/node:v1.33.7
+  - role: worker
+    image: kindest/node:v1.33.7
+  - role: worker
+    image: kindest/node:v1.33.7
+  - role: worker
+    image: kindest/node:v1.33.7
+  - role: worker
+    image: kindest/node:v1.33.7
+  - role: worker
+    image: kindest/node:v1.33.7

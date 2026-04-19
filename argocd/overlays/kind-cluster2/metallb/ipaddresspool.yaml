@@ -1,0 +1,21 @@
+# IP range carved from the kind Docker bridge network (typically 172.18.0.0/16).
+# cluster2 uses .220-.230, cluster1 uses .200-.210 — no overlap.
+# If your Docker network differs, update the range to match:
+#   docker network inspect kind --format '{{(index .IPAM.Config 0).Subnet}}'
+apiVersion: metallb.io/v1beta1
+kind: IPAddressPool
+metadata:
+  name: default-pool
+  namespace: metallb-system
+spec:
+  addresses:
+    - 192.168.97.220-192.168.97.230
+---
+apiVersion: metallb.io/v1beta1
+kind: L2Advertisement
+metadata:
+  name: default
+  namespace: metallb-system
+spec:
+  ipAddressPools:
+    - default-pool

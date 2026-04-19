@@ -1,0 +1,47 @@
+# kubeProxyReplacement must be false when running alongside Istio sidecar mode.
+# Istio uses iptables for traffic interception; Cilium's eBPF service datapath
+# would compete with those rules if kube-proxy replacement were enabled.
+kubeProxyReplacement: false
+
+ipam:
+  mode: kubernetes
+
+operator:
+  # Single replica is sufficient for kind (no HA for the operator itself)
+  replicas: 1
+  resources:
+    requests:
+      cpu: 10m
+      memory: 64Mi
+    limits:
+      cpu: 200m
+      memory: 256Mi
+
+resources:
+  requests:
+    cpu: 50m
+    memory: 128Mi
+  limits:
+    cpu: 500m
+    memory: 512Mi
+
+hubble:
+  enabled: true
+  relay:
+    enabled: true
+    resources:
+      requests:
+        cpu: 10m
+        memory: 32Mi
+      limits:
+        cpu: 200m
+        memory: 128Mi
+  ui:
+    enabled: true
+    resources:
+      requests:
+        cpu: 10m
+        memory: 32Mi
+      limits:
+        cpu: 200m
+        memory: 128Mi

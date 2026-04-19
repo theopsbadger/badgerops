@@ -6,24 +6,8 @@ configs:
     # kube-prometheus-stack is a large chart and takes >90s to render under load.
     # Default exec timeout is 90s — bumping to 300s prevents DeadlineExceeded.
     exec.timeout: 300s
-    admin.enabled: "false"
-    url: https://argocd.k8s.badgerops.io
-    dex.config: |
-      connectors:
-        - type: github
-          id: github
-          name: GitHub
-          config:
-            clientID: $dex.github.clientId
-            clientSecret: $dex.github.clientSecret
-  rbac:
-    policy.default: role:readonly
-    scopes: '[preferred_username, groups]'
-    policy.csv: |
-      g, theopsbadger, role:admin
-      # Add additional GitHub users below:
-      # g, <github-username>, role:admin
-      # g, <github-username>, role:readonly
+    # admin.enabled, url, dex.config, and rbac are environment-specific.
+    # Set them via argocd-cm / argocd-rbac-cm patches in each cluster overlay.
 repoServer:
   livenessProbe:
     initialDelaySeconds: 30

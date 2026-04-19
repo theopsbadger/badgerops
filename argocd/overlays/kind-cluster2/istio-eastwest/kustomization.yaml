@@ -1,0 +1,25 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  - ../../../base/istio-eastwest
+patches:
+  # Patch network label and env var from network1 (base default) to network2
+  - target:
+      kind: Deployment
+      name: istio-eastwestgateway
+    patch: |
+      apiVersion: apps/v1
+      kind: Deployment
+      metadata:
+        name: istio-eastwestgateway
+      spec:
+        template:
+          metadata:
+            labels:
+              topology.istio.io/network: network2
+          spec:
+            containers:
+              - name: istio-proxy
+                env:
+                  - name: ISTIO_META_REQUESTED_NETWORK_VIEW
+                    value: network2
