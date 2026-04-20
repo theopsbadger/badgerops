@@ -23,3 +23,5 @@ patches:
                 env:
                   - name: ISTIO_META_REQUESTED_NETWORK_VIEW
                     value: network2
+                  - name: CLUSTER_ID
+                    value: cluster2

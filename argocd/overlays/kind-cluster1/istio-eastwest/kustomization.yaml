@@ -2,3 +2,20 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
   - ../../../base/istio-eastwest
+patches:
+  - target:
+      kind: Deployment
+      name: istio-eastwestgateway
+    patch: |
+      apiVersion: apps/v1
+      kind: Deployment
+      metadata:
+        name: istio-eastwestgateway
+      spec:
+        template:
+          spec:
+            containers:
+              - name: istio-proxy
+                env:
+                  - name: CLUSTER_ID
+                    value: cluster1
