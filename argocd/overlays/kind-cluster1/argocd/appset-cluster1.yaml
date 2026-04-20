@@ -32,10 +32,6 @@ spec:
           kind: MutatingWebhookConfiguration
           jqPathExpressions:
             - .webhooks[]?.failurePolicy
-        - group: monitoring.coreos.com
-          kind: PodMonitor
-          jqPathExpressions:
-            - .spec.namespaceSelector
       syncPolicy:
         automated:
           prune: true

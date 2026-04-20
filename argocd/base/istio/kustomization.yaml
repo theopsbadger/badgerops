@@ -3,7 +3,6 @@ kind: Kustomization
 namespace: istio-system
 resources:
   - namespace.yaml
-  - podmonitor-istiod.yaml
 helmCharts:
   - name: base
     repo: https://istio-release.storage.googleapis.com/charts

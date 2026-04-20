@@ -2,7 +2,6 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 namespace: istio-system
 resources:
-  - namespace.yaml
   - cross-network-gateway.yaml
 # The gateway Helm chart deploys an Envoy-based east-west gateway.
 # network label and ISTIO_META_REQUESTED_NETWORK_VIEW default to network1 —
