@@ -19,3 +19,5 @@ patches:
                 env:
                   - name: CLUSTER_ID
                     value: cluster1
+                  - name: ISTIO_META_CLUSTER_ID
+                    value: cluster1

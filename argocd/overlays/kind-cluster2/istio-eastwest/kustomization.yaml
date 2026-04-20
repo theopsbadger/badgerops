@@ -25,3 +25,5 @@ patches:
                     value: network2
                   - name: CLUSTER_ID
                     value: cluster2
+                  - name: ISTIO_META_CLUSTER_ID
+                    value: cluster2
