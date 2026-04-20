@@ -170,14 +170,25 @@ exchange_istio_secrets() {
 
   log "Exchanging Istio remote secrets..."
 
+  # kind API servers listen on 127.0.0.1 in kubeconfig, which is unreachable
+  # from inside the cluster. Use the control-plane container's Docker network
+  # IP so istiod can actually reach the remote API server.
+  local c1_ip c2_ip
+  c1_ip=$(docker inspect "${CLUSTER1}-control-plane" \
+    --format='{{.NetworkSettings.Networks.kind.IPAddress}}')
+  c2_ip=$(docker inspect "${CLUSTER2}-control-plane" \
+    --format='{{.NetworkSettings.Networks.kind.IPAddress}}')
+
   istioctl create-remote-secret \
     --context="${CTX1}" \
     --name="${CLUSTER1}" \
+    --server="https://${c1_ip}:6443" \
     | kubectl apply -f - --context="${CTX2}"
 
   istioctl create-remote-secret \
     --context="${CTX2}" \
     --name="${CLUSTER2}" \
+    --server="https://${c2_ip}:6443" \
     | kubectl apply -f - --context="${CTX1}"
 
   ok "Remote secrets exchanged — cross-cluster service discovery active"
