@@ -5,5 +5,6 @@ kind: Kustomization
 # experimental-install.yaml adds GRPCRoute, TCPRoute, TLSRoute, UDPRoute, BackendTLSPolicy.
 # Deploy this application before istio — Istio validates Gateway API CRDs on install.
 resources:
-  - https://github.com/kubernetes-sigs/gateway-api/releases/download/v1.5.1/standard-install.yaml
+  # experimental-install.yaml is a superset — it includes all standard CRDs plus
+  # GRPCRoute, BackendTLSPolicy, etc. Installing both would cause duplicate resource IDs.
   - https://github.com/kubernetes-sigs/gateway-api/releases/download/v1.5.1/experimental-install.yaml
