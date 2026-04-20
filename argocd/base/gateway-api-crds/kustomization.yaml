@@ -1,8 +1,9 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
-# Remote resources pulled directly from the gateway-api repo at a pinned tag.
-# ArgoCD fetches these at sync time — requires outbound GitHub access from the cluster.
+# CRDs fetched from the pinned release artifacts.
+# standard-install.yaml includes GatewayClass, Gateway, HTTPRoute, ReferenceGrant.
+# experimental-install.yaml adds GRPCRoute, TCPRoute, TLSRoute, UDPRoute, BackendTLSPolicy.
 # Deploy this application before istio — Istio validates Gateway API CRDs on install.
 resources:
-  - github.com/kubernetes-sigs/gateway-api//config/crd/standard?ref=v1.5.1
-  - github.com/kubernetes-sigs/gateway-api//config/crd/experimental?ref=v1.5.1
+  - https://github.com/kubernetes-sigs/gateway-api/releases/download/v1.5.1/standard-install.yaml
+  - https://github.com/kubernetes-sigs/gateway-api/releases/download/v1.5.1/experimental-install.yaml
